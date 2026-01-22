@@ -1,22 +1,20 @@
 "use client";
-import { useCodeEditorStore } from "@/store/useCodeEditorStore";
-import { useEffect, useState } from "react";
+
 import { defineMonacoThemes, LANGUAGE_CONFIG } from "@/constants";
-import { Editor } from "@monaco-editor/react";
-import { motion } from "framer-motion";
-import Image from "next/image";
-import { RotateCcwIcon, ShareIcon, TypeIcon } from "lucide-react";
-import { useClerk } from "@clerk/nextjs";
-import { EditorPanelSkeleton } from "./EditorPanelSkeleton";
 import useMounted from "@/hooks/useMounted";
+import { useCodeEditorStore } from "@/store/useCodeEditorStore";
+import { useClerk } from "@clerk/nextjs";
+import { Editor } from "@monaco-editor/react";
+import { TypeIcon } from "lucide-react";
+import Image from "next/image";
+import { useEffect } from "react";
+import { EditorPanelSkeleton } from "./EditorPanelSkeleton";
 import LanguageSelector from "./LanguageSelector";
 import ThemeSelector from "./ThemeSelector";
 
-function EditorPanel() {
+export default function EditorPanel() {
   const clerk = useClerk();
-  const [isShareDialogOpen, setIsShareDialogOpen] = useState(false);
-  const { language, theme, fontSize, editor, setFontSize, setEditor } =
-    useCodeEditorStore();
+  const { language, theme, fontSize, editor, setFontSize, setEditor } = useCodeEditorStore();
 
   const mounted = useMounted();
 
@@ -31,11 +29,11 @@ function EditorPanel() {
     if (savedFontSize) setFontSize(parseInt(savedFontSize));
   }, [setFontSize]);
 
-  const handleRefresh = () => {
-    const defaultCode = LANGUAGE_CONFIG[language].defaultCode;
-    if (editor) editor.setValue(defaultCode);
-    localStorage.removeItem(`editor-code-${language}`);
-  };
+  // const handleRefresh = () => {
+  //   const defaultCode = LANGUAGE_CONFIG[language].defaultCode;
+  //   if (editor) editor.setValue(defaultCode);
+  //   localStorage.removeItem(`editor-code-${language}`);
+  // };
 
   const handleEditorChange = (value: string | undefined) => {
     if (value) localStorage.setItem(`editor-code-${language}`, value);
@@ -51,23 +49,16 @@ function EditorPanel() {
 
   return (
     <div className="relative">
-      <div className="relative bg-[#12121a]/90 backdrop-blur rounded-xl border border-white/[0.05] h-[95vh] px-6 py-4">
+      <div className="relative bg-[#12121a]/90 backdrop-blur rounded-xl border border-white/5 h-[95vh] px-6 py-4">
         {/* Header */}
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
             <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-[#1e1e2e] ring-1 ring-white/5">
-              <Image
-                src={"/" + language + ".png"}
-                alt="Logo"
-                width={24}
-                height={24}
-              />
+              <Image src={"/" + language + ".png"} alt="Logo" width={24} height={24} />
             </div>
             <div>
               <h2 className="text-sm font-medium text-white">Code Editor</h2>
-              <p className="text-xs text-gray-500">
-                Write and execute your code
-              </p>
+              <p className="text-xs text-gray-500">Write and execute your code</p>
             </div>
           </div>
           <div className="flex items-center gap-3">
@@ -84,21 +75,17 @@ function EditorPanel() {
                   min="12"
                   max="24"
                   value={fontSize}
-                  onChange={(e) =>
-                    handleFontSizeChange(parseInt(e.target.value))
-                  }
+                  onChange={(e) => handleFontSizeChange(parseInt(e.target.value))}
                   className="w-20 h-1 bg-gray-600 rounded-lg cursor-pointer"
                 />
-                <span className="text-sm font-medium text-gray-400 min-w-[2rem] text-center">
-                  {fontSize}
-                </span>
+                <span className="text-sm font-medium text-gray-400 min-w-8 text-center">{fontSize}</span>
               </div>
             </div>
           </div>
         </div>
 
         {/* Editor  */}
-        <div className="relative group rounded-xl overflow-hidden ring-1 ring-white/[0.05]">
+        <div className="relative group rounded-xl overflow-hidden ring-1 ring-white/5">
           {clerk.loaded && (
             <Editor
               height="520px"
@@ -137,4 +124,3 @@ function EditorPanel() {
     </div>
   );
 }
-export default EditorPanel;
