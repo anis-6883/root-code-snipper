@@ -1,4 +1,4 @@
-# Root Code Snipper 🚀
+# Code Rakho 🚀
 
 A secure, fast, and elegant code snippet sharing platform built for development teams. Share, organize, and collaborate on code without friction.
 
@@ -127,4 +127,4 @@ For questions, feedback, or support:
 
 ---
 
-**Root Code Snipper** © 2026 - Making code sharing simple and secure
+**Code Rakho** © 2026 - Making code sharing simple and secure
